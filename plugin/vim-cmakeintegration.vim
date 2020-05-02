@@ -18,13 +18,24 @@ python_root_dir = normpath(join(plugin_root_dir, '..', 'python'))
 sys.path.insert(0, python_root_dir)
 EOF
 
-function! ParseSettings()
+function! StartServer()
 
 python3 << EOF
-import settingsReader
-settingsReader.parse_settings()
+import cmake_server
+asyncio.run(start_server())
 EOF
 
 endfunction
+
+function! Configure()
+
+python3 << EOF
+import message_sender
+asyncio.run(send_message('configure'))
+EOF
+
+endfunction
+
+call StartServer()
 
 command! -nargs=0 ParseSettings call ParseSettings()
