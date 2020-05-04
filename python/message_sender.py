@@ -4,7 +4,7 @@ import argparse
 
 class MessageSender:
     async def send(self, message):
-        reader, writer = await asyncio.open_connection('127.0.0.1', 8888)
+        reader, writer = await asyncio.open_connection('127.0.0.1', 65001)
         writer.write(message.encode())
 
 if __name__ == '__main__':

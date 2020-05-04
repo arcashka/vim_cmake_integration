@@ -10,9 +10,11 @@ if exists('g:vim_cmakeintegration_loaded')
 endif
 
 python3 << EOF
+
 import sys
 from os.path import normpath, join
 import vim
+
 plugin_root_dir = vim.eval('s:plugin_root_dir')
 python_root_dir = normpath(join(plugin_root_dir, '..', 'python'))
 sys.path.insert(0, python_root_dir)
@@ -21,13 +23,14 @@ EOF
 function! StartServer()
 
 python3 << EOF
-import cmake_server
-import asyncio
 
-server = cmake_server.Server()
-loop = asyncio.get_event_loop()
-loop.create_task(server.start())
-loop.start()
+import subprocess
+import vim
+
+plugin_root_dir = vim.eval('s:plugin_root_dir')
+python_root_dir = normpath(join(plugin_root_dir, '..', 'python'))
+proc = subprocess.Popen(['python', python_root_dir + '/cmake_server.py'])
+#proc.communicate()
 
 EOF
 
@@ -36,10 +39,13 @@ endfunction
 function! Configure()
 
 python3 << EOF
+
 import message_sender
+import asyncio
 
 sender = message_sender.MessageSender()
 asyncio.run(sender.send('configure'))
+
 EOF
 
 endfunction
@@ -54,8 +60,6 @@ asyncio.run(sender.send('quit'))
 EOF
 
 endfunction
-
-call StartServer()
 
 command! -nargs=0 CMakeConfigure call Configure()
 command! -nargs=0 CMakeQuit call Quit()
