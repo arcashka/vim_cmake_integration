@@ -14,6 +14,7 @@ class Server:
         self.cmake = CMakeHelper()
 
     async def start(self):
+        print("start server")
         self.server = await asyncio.start_server(self.handler, '127.0.0.1', 8888)
         async with self.server:
             await self.server.wait_closed()
@@ -37,9 +38,5 @@ class Server:
         writer.close()
 
 
-async def main():
-    a = Server()
-    await a.start()
-
-
-asyncio.run(main())
+if __name__ == '__main__':
+    asyncio.run(start_server())

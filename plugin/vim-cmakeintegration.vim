@@ -22,7 +22,13 @@ function! StartServer()
 
 python3 << EOF
 import cmake_server
-asyncio.run(start_server())
+import asyncio
+
+server = cmake_server.Server()
+loop = asyncio.get_event_loop()
+loop.create_task(server.start())
+loop.start()
+
 EOF
 
 endfunction
@@ -31,11 +37,25 @@ function! Configure()
 
 python3 << EOF
 import message_sender
-asyncio.run(send_message('configure'))
+
+sender = message_sender.MessageSender()
+asyncio.run(sender.send('configure'))
+EOF
+
+endfunction
+
+function! Quit()
+
+python3 << EOF
+import message_sender
+
+sender = message_sender.MessageSender()
+asyncio.run(sender.send('quit'))
 EOF
 
 endfunction
 
 call StartServer()
 
-command! -nargs=0 ParseSettings call ParseSettings()
+command! -nargs=0 CMakeConfigure call Configure()
+command! -nargs=0 CMakeQuit call Quit()

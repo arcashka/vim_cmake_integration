@@ -1,15 +1,19 @@
 import asyncio
 import argparse
 
-#parser = argparse.ArgumentParser(description='Send message to cmake server')
-#parser.add_argument('message', metavar='message', type=str, nargs=1, help='message to send')
 
-#args = parser.parse_args()
-#print(args.message)
+class MessageSender:
+    async def send(self, message):
+        reader, writer = await asyncio.open_connection('127.0.0.1', 8888)
+        writer.write(message.encode())
 
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Send message to cmake server')
+    parser.add_argument('message', metavar='message', type=str, nargs=1, help='message to send')
 
-async def send_message(message):
-    reader, writer = await asyncio.open_connection('127.0.0.1', 8888)
-    writer.write(message.encode())
+    args = parser.parse_args()
+    print(args.message)
 
-#asyncio.run()
+    message_sender = MessageSender()
+    asyncio.run(message_sender.send(args.message[0]))
+
