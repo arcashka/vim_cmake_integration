@@ -29,7 +29,7 @@ import vim
 
 plugin_root_dir = vim.eval('s:plugin_root_dir')
 python_root_dir = normpath(join(plugin_root_dir, '..', 'python'))
-proc = subprocess.Popen(['python', python_root_dir + '/cmake_server.py'])
+proc = subprocess.Popen(['python', python_root_dir + '/cmake_server.py'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 #proc.communicate()
 
 EOF
@@ -63,3 +63,5 @@ endfunction
 
 command! -nargs=0 CMakeConfigure call Configure()
 command! -nargs=0 CMakeQuit call Quit()
+command! -nargs=0 CMakeStart call StartServer()
+
