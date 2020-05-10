@@ -1,5 +1,6 @@
 import asyncio
 import argparse
+import vim
 
 
 class MessageSender:
