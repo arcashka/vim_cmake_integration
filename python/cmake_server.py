@@ -14,27 +14,20 @@ class Server:
         self.cmake = CMakeHelper()
 
     async def start(self):
-        print("start server")
         self.server = await asyncio.start_server(self.handler, '127.0.0.1', 65001)
         async with self.server:
             await self.server.wait_closed()
 
     async def handler(self, reader, writer):
-        data = await reader.read(100)
+        data = await reader.read()
         message = data.decode()
+        print('got message={}'.format(message))
         if message == quit_message:
             self.server.close()
+            writer.feed_eof()
         if message == configure:
-            self.cmake.configure(self.settings.data[0])
-        addr = writer.get_extra_info('peername')
-
-        print(f"Received {message!r} from {addr!r}")
-
-        print(f"Send: {message!r}")
-        writer.write(data)
+            await self.cmake.configure(self.settings.data[0], writer)
         await writer.drain()
-
-        print("Close the connection")
         writer.close()
 
 

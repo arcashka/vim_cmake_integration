@@ -27,10 +27,8 @@ python3 << EOF
 import subprocess
 import vim
 
-plugin_root_dir = vim.eval('s:plugin_root_dir')
-python_root_dir = normpath(join(plugin_root_dir, '..', 'python'))
-proc = subprocess.Popen(['python', python_root_dir + '/cmake_server.py'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-#proc = subprocess.Popen(['python', python_root_dir + '/cmake_server.py'])
+#proc = subprocess.Popen(['python', python_root_dir + '/cmake_server.py'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+proc = subprocess.Popen(['python', python_root_dir + '/cmake_server.py'])
 
 EOF
 
